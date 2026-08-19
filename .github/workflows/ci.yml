@@ -1,0 +1,57 @@
+name: Browser CTF CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  discover-tasks:
+    runs-on: ubuntu-latest
+    outputs:
+      tasks: ${{ steps.discover.outputs.tasks }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: discover
+        run: |
+          tasks=$(ls -d cve-*/ | jq -R -s -c 'split("\n")[:-1]')
+          echo "tasks=$tasks" >> $GITHUB_OUTPUT
+
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pyyaml
+      - run: python scripts/validate_all.py
+
+  build-and-verify:
+    needs: [discover-tasks]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        task: ${{ fromJson(needs.discover-tasks.outputs.tasks) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pyyaml pytest
+      - name: Build ${{ matrix.task }}
+        run: |
+          cd ${{ matrix.task }}
+          docker build -t browser-ctf/${{ matrix.task }} .
+      - name: Verify ${{ matrix.task }}
+        run: |
+          cd ${{ matrix.task }}
+          bash run-tests.sh
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-${{ matrix.task }}
+          path: ${{ matrix.task }}/verify_report.json

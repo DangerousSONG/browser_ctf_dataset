@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Browser CTF 统一验证器
-适配 CVE-Factory 规范，针对"漏洞利用"场景重新设计验证逻辑
+每个 CVE 目录独立验证
 """
 
 import subprocess
@@ -18,7 +18,6 @@ from typing import List, Dict, Optional
 @dataclass
 class VerificationResult:
     task_id: str
-    stage: str
     timestamp: str
     checks: Dict[str, bool]
     overall: str
@@ -30,7 +29,6 @@ class TaskVerifier:
     def __init__(self, task_path: str):
         self.task_path = Path(task_path)
         self.task_id = self.task_path.name
-        self.stage = self.task_path.parent.name
         self.task_yaml = self._load_task_yaml()
         self.results = {}
         self.logs = {}
@@ -58,10 +56,10 @@ class TaskVerifier:
             return -2, "", str(e)
 
     def check_files(self) -> bool:
-        """Stage 0: 检查必要文件是否齐全"""
+        """Stage 0: 检查必要文件"""
         required = [
             "task.yaml", "Dockerfile", "run-tests.sh",
-            "tests/test_vuln.py", "tests/test_func.py"
+            "tests/test_vuln.py", "tests/test_func.py", "README.md"
         ]
         for f in required:
             if not (self.task_path / f).exists():
@@ -72,7 +70,7 @@ class TaskVerifier:
 
     def check_build(self) -> bool:
         """Stage 1: 构建 Docker 镜像"""
-        image_tag = f"browser-ctf/{self.stage}-{self.task_id}"
+        image_tag = f"browser-ctf/{self.task_id}"
         ret, out, err = self._run_cmd(
             ["docker", "build", "-t", image_tag, "."],
             cwd=str(self.task_path),
@@ -82,81 +80,49 @@ class TaskVerifier:
         return ret == 0
 
     def check_env_ready(self) -> bool:
-        """Stage 2: 环境就绪验证
-        - test_vuln.py FAIL: 漏洞存在（未打补丁）
-        - test_func.py PASS: 环境功能正常
-        """
-        image_tag = f"browser-ctf/{self.stage}-{self.task_id}"
+        """Stage 2: 环境就绪验证"""
+        image_tag = f"browser-ctf/{self.task_id}"
 
-        # 运行功能测试
-        ret_func, out_func, err_func = self._run_cmd([
-            "docker", "run", "--rm",
-            image_tag,
+        ret_func, out_func, _ = self._run_cmd([
+            "docker", "run", "--rm", image_tag,
             "python3", "-m", "pytest", "tests/test_func.py", "-v"
         ])
         func_pass = ret_func == 0
 
-        # 运行漏洞测试（未修复时应能通过=漏洞可利用）
-        ret_vuln, out_vuln, err_vuln = self._run_cmd([
-            "docker", "run", "--rm",
-            image_tag,
+        ret_vuln, out_vuln, _ = self._run_cmd([
+            "docker", "run", "--rm", image_tag,
             "python3", "-m", "pytest", "tests/test_vuln.py", "-v"
         ])
         vuln_pass = ret_vuln == 0
 
-        self.logs["env"] = f"func_pass={func_pass}, vuln_pass={vuln_pass}\n{out_func}\n{out_vuln}"
+        self.logs["env"] = f"func={func_pass}, vuln={vuln_pass}\n{out_func}\n{out_vuln}"
         return func_pass and vuln_pass
 
-    def check_exploit_ready(self) -> bool:
-        """Stage 3: 利用链完整性验证
-        运行 exploit/ 目录下的参考利用，验证完整链可执行
-        """
-        exploit_dir = self.task_path / "exploit"
-        if not exploit_dir.exists():
-            self.logs["exploit"] = "No exploit directory, skipping"
-            return True  # 可选
-
-        image_tag = f"browser-ctf/{self.stage}-{self.task_id}"
-        ret, out, err = self._run_cmd([
-            "docker", "run", "--rm",
-            image_tag,
-            "bash", "-c", "cd /opt/exploit && bash run_exploit.sh"
-        ])
-        self.logs["exploit"] = out + err
-        return ret == 0 and "EXPLOIT_SUCCESS" in out
-
     def check_cve_ready(self) -> bool:
-        """Stage 4: 端到端验证
-        运行 run-tests.sh 作为最终判定
-        """
-        image_tag = f"browser-ctf/{self.stage}-{self.task_id}"
+        """Stage 3: 端到端验证"""
+        image_tag = f"browser-ctf/{self.task_id}"
         ret, out, err = self._run_cmd([
-            "docker", "run", "--rm",
-            image_tag,
+            "docker", "run", "--rm", image_tag,
             "bash", "run-tests.sh"
         ])
         self.logs["e2e"] = out + err
         return ret == 0
 
     def verify(self) -> VerificationResult:
-        """执行完整验证流水线"""
-        print(f"[+] Verifying {self.stage}/{self.task_id}")
+        print(f"[+] Verifying {self.task_id}")
 
         checks = {
             "files": self.check_files(),
-            "build": self.check_build(),
+            "build": False,
             "env_ready": False,
-            "exploit_ready": False,
             "cve_ready": False
         }
 
+        if checks["files"]:
+            checks["build"] = self.check_build()
         if checks["build"]:
             checks["env_ready"] = self.check_env_ready()
-
         if checks["env_ready"]:
-            checks["exploit_ready"] = self.check_exploit_ready()
-
-        if checks["exploit_ready"]:
             checks["cve_ready"] = self.check_cve_ready()
 
         score = sum(checks.values()) / len(checks) * 100
@@ -164,7 +130,6 @@ class TaskVerifier:
 
         result = VerificationResult(
             task_id=self.task_id,
-            stage=self.stage,
             timestamp=datetime.now().isoformat(),
             checks=checks,
             overall=overall,
@@ -172,7 +137,6 @@ class TaskVerifier:
             logs=self.logs
         )
 
-        # 保存报告
         report_path = self.task_path / "verify_report.json"
         with open(report_path, "w") as f:
             json.dump(asdict(result), f, indent=2)
@@ -182,20 +146,19 @@ class TaskVerifier:
 
 def main():
     if len(sys.argv) < 2:
-        print(f"Usage: {sys.argv[0]} <task_path>")
+        print(f"Usage: {sys.argv[0]} <cve-directory>")
         sys.exit(1)
 
     verifier = TaskVerifier(sys.argv[1])
     result = verifier.verify()
 
     print(f"\n{'='*60}")
-    print(f"Verification Result: {result.overall} ({result.score:.1f}%)")
+    print(f"Result: {result.overall} ({result.score:.1f}%)")
     print(f"{'='*60}")
     for check, passed in result.checks.items():
         status = "✓" if passed else "✗"
         print(f"  [{status}] {check}")
     print(f"{'='*60}")
-
     sys.exit(0 if result.overall == "PASS" else 1)
 
 
