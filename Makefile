@@ -1,24 +1,33 @@
-.PHONY: all validate build verify clean
+.PHONY: generate validate sync mcp bootstrap wrap help
 
-# 默认：验证所有靶场
-all: validate
+CVE ?= CVE-2024-5830
+BENCH := third_party/exploitbench/benchmarks/bench-v8
 
-# 验证所有 CVE 目录
+# Default: unify formats. Does not compile V8.
+generate:
+	python scripts/generate_all.py
+	python scripts/validate_all.py
+
 validate:
-	@python3 scripts/validate_all.py
+	python scripts/validate_all.py
 
-# 构建所有镜像
-build:
-	@python3 scripts/build_all.py
+sync:
+	python scripts/sync_upstream.py
 
-# 验证单个靶场
-verify:
-	@if [ -z "$(CVE)" ]; then \
-		echo "Usage: make verify CVE=cve-2018-17463"; \
-		exit 1; \
-	fi
-	@cd $(CVE) && bash run-tests.sh
+mcp: sync
+	$(MAKE) -C $(BENCH)/mcp-server all
 
-# 清理所有镜像
-clean:
-	@docker images -q "browser-ctf/*" | xargs -r docker rmi -f 2>/dev/null || true
+bootstrap:
+	python scripts/bootstrap_bug.py $(CVE)
+
+wrap:
+	python scripts/wrap_harbor_task.py $(CVE) --force
+
+# Optional. Linux amd64, ~60min, ~70GB. Not required to submit the task package.
+build-inner:
+	python scripts/build_inner.py $(CVE)
+
+help:
+	@echo "Submit path: unify Harbor packages (make generate). No V8 compile."
+	@echo "Fill real Dockerfile commits: make sync && make mcp && make bootstrap CVE=$(CVE)"
+	@echo "Someone else's builder: make build-inner CVE=$(CVE)"

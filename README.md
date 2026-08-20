@@ -1,134 +1,84 @@
-# Browser CTF Dataset
+# Browser V8 reproduction tasks (Harbor + bench-v8)
 
-> 浏览器漏洞利用沙箱靶场数据集。每个 CVE 对应一个独立的 Docker 项目，可单独构建、部署和验证。
+This repo delivers **unified Harbor task packages**. It does **not** require
+building the 65–70GB V8 images on a laptop.
 
-## 交付说明
+Others can compile because every task uses the **same, pinned bench-v8
+recipe** that ExploitBench already builds — not a homemade `gclient` Dockerfile.
 
-本仓库默认交付的是“可运行题目目录”，不是预先构建好的 Docker 镜像。
+## How compile is guaranteed without compiling here
 
-每个 `cve-*` 目录应当可以独立运行，并包含：
+| Layer | Who does it | What it proves |
+|-------|-------------|----------------|
+| Unified Harbor layout | this repo | Pipeline can load the task |
+| Official `Dockerfile.template` at ExploitBench `9d0173bc` | this repo copies / bootstrap generates | The compile recipe is one that already works upstream |
+| Pins: depot_tools `364ccfdd`, Harbor schema `1.3`, debian bookworm digest | `pins.toml` | Toolchain cannot drift |
+| `bootstrap_v8.py` fills `tgt_commit` / `last_patch_commit` | minutes, **no V8 compile** | Revision pair is real, Dockerfile is no longer a placeholder |
+| `python build_bugs.py` | Linux amd64 builder (~60 min, ~100 GB) | Actual `d8` images — optional for the author, required for the pipeline |
 
-```text
-Dockerfile
-docker-compose.yml
-task.yaml
-README.md
-run-tests.sh
-poc/
-exploit/
-solution/
-tests/
+What this does **not** prove (and must not be faked):
+
+- A 2022-era V8 still matching current grader text anchors — report as a patcher/build blocker, do not silently change the revision.
+- That *your laptop* can finish ninja. Official target is Ubuntu x86_64 / `linux/amd64`.
+
+The earlier `/v8/v8` `gclient` failure is exactly what this avoids: do not write a custom V8 fetch.
+
+## Disk / time (when someone else compiles)
+
+One CVE ⇒ one image, about **65–70GB**, about **60 minutes** on a fast workstation.
+You do not need six images locally. Generate six **task directories**; compile one on a builder if a smoke check is requested.
+
+## Layout
+
+```
+candidates/<CVE>/          # selection notes, flags, crbug (not agent-visible)
+templates/harbor/          # single format for every task
+tasks/browser-v8-<cve>/    # Harbor package (what the pipeline runs)
+pins.toml                  # locked commits / CLI / schema
+scripts/                   # generate + validate; does not rewrite bench-v8
 ```
 
-其中 `Dockerfile` 是构建环境的说明书；执行 `docker build` 后生成的 `browser-ctf/<cve-name>` 才是本机上的 Docker 镜像。除非特别要求，后续 CVE 只需要提交完整的可运行题目目录即可，不需要提前把每一个镜像都构建出来。
-
-## 目录结构
+Each task:
 
 ```
-browser_ctf_dataset/
-├── cve-2018-17463/          # 独立靶场：CVE-2018-17463
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   ├── task.yaml
-│   ├── poc/
-│   ├── tests/
-│   ├── exploit/
-│   ├── solution/
-│   └── README.md
-├── cve-xxxx-yyyyy/          # 后续新增的独立靶场目录
-│   └── ...
-├── framework/               # 共享验证框架
-│   ├── verifier.py
-│   ├── runner.py
-│   └── schemas/
-├── scripts/                   # 批量脚本
-│   ├── validate_all.py
-│   ├── build_all.py
-│   └── init_cve.sh
-├── Makefile
-└── README.md
+browser-v8-<cve>/
+├── task.toml
+├── instruction.md              # no CVE / patch / exploit
+├── environment/
+│   ├── Dockerfile              # bench-v8 recipe (after bootstrap)
+│   ├── docker-compose.yaml
+│   ├── task.yaml               # revision pair; not copied into agent image
+│   ├── .factory/manifest.yaml
+│   └── task-deps/
+└── tests/
+    ├── test.sh
+    └── private/                # never COPY into the agent image
 ```
 
-## 快速开始
+## Generate (no V8 compile)
 
-### 准备 Docker
-
-在 Windows 上构建前，请先启动 Docker Desktop，并确认左下角或命令行显示正在使用 Linux 引擎。
-
-可以在 PowerShell 中检查：
-
-```powershell
-docker version
-```
-
-如果看到类似下面的错误，说明 Docker Desktop 还没有启动，或 Docker 引擎还没有就绪：
-
-```text
-failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine
-```
-
-处理方式：打开 Docker Desktop，等待引擎启动完成后重新执行构建命令。
-
-### 构建单个靶场
-
-以下命令会把 `cve-2018-17463` 目录构建成本机 Docker 镜像：
-
-```powershell
-cd cve-2018-17463
-docker build -t browser-ctf/cve-2018-17463 .
-```
-
-构建成功后，最后通常会出现类似输出：
-
-```text
-naming to docker.io/browser-ctf/cve-2018-17463
-```
-
-也可以用下面命令检查镜像是否存在：
-
-```powershell
-docker image ls browser-ctf/cve-2018-17463
-```
-
-注意：部分浏览器漏洞环境会在 Dockerfile 中下载和编译 V8/Chromium 相关源码，首次构建可能需要较长时间。后续如果 Docker 缓存没有失效，相同步骤会明显变快。
-
-### 验证单个靶场
-
-在题目目录内运行测试脚本：
-
-```powershell
-cd cve-2018-17463
-docker run --rm browser-ctf/cve-2018-17463
-```
-
-### 批量验证所有靶场
-
-在仓库根目录运行结构校验：
-
-```powershell
+```bash
+python scripts/wrap_harbor_task.py CVE-2024-5830
+python scripts/generate_all.py          # all candidates, same format
 python scripts/validate_all.py
 ```
 
-该脚本会检查所有 `cve-*` 目录是否包含必需文件，并校验 `task.yaml` 和 `Dockerfile` 的基本格式。
+Fill the real compile Dockerfile (still no ninja):
 
-## 添加新靶场
-
-```powershell
-bash scripts/init_cve.sh cve-2020-6507
-cd cve-2020-6507
-# 编辑 Dockerfile、task.yaml、tests/...
+```bash
+python scripts/sync_upstream.py
+# Linux: make -C third_party/exploitbench/benchmarks/bench-v8/mcp-server all
+python scripts/bootstrap_bug.py CVE-2024-5830
+python scripts/wrap_harbor_task.py CVE-2024-5830 --force
 ```
 
-新增 CVE 目录时，请确保至少满足：
+Optional, on a Linux amd64 machine with ~100GB free:
 
-- 目录名使用 `cve-年份-编号` 格式，例如 `cve-2018-17463`
-- 根目录存在 `Dockerfile`、`task.yaml`、`README.md`、`run-tests.sh`
-- 测试文件存在于 `tests/test_vuln.py` 和 `tests/test_func.py`
-- PoC、利用脚本和修复说明分别放在 `poc/`、`exploit/`、`solution/`
-- 单个目录可以独立 `docker build`
+```bash
+python scripts/build_inner.py CVE-2024-5830
+```
 
-## 靶场列表
+## Pins
 
-| CVE | 类型 | 难度 | 状态 |
-|-----|------|------|------|
-| CVE-2018-17463 | V8 JIT Type Confusion | easy | 已完成 |
+See `pins.toml`. Dedup against ExploitBench `TARGETS` at `9d0173bc` — these
+candidates are new samples, not re-packaged existing bench-v8 bugs.

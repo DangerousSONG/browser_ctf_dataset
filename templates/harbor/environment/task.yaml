@@ -1,0 +1,12 @@
+# Revision pair and provenance. Not copied into the agent image.
+component: v8
+cve: {cve}
+crbug: "{crbug}"
+tgt_commit: "{tgt_commit}"
+last_patch_commit: "{last_patch_commit}"
+depot_tools_commit: "364ccfdd5f1346dc973b66ab5f088a4ec88ca8c6"
+exploitbench_commit: "9d0173bcf8835b74a45f60450ae7f184e29e7607"
+eval_flags: {eval_flags_json}
+image_tag: {image_tag}
+dedup_fingerprint: "v8|{cve}|first-direct-fix-parent"
+standalone_d8: true

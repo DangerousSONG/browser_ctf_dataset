@@ -1,0 +1,27 @@
+# Upstream clone (pinned in pins.toml; do not vendor)
+third_party/
+
+# bench-v8 generated / build artifacts (~65-70GB per CVE)
+bugs/
+db/
+build-logs/
+*.tar.zst
+*.tar
+
+# Local reports and caches
+verify_report.json
+.env
+.cache/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Private reference payloads (keep directory, not the JS)
+tasks/**/tests/private/tier-evidence/*.js
+!tasks/**/tests/private/tier-evidence/.gitkeep
+tasks/**/tests/private/tier-evidence/*.log
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
