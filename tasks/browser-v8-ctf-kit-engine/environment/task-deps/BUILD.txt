@@ -1,0 +1,12 @@
+CTF source package for Kit Engine
+
+Source repository: https://github.com/exd0tpy/CTF-browser-challenges
+Source path: Kit_Engine
+Source files copied: 9
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-kit-engine/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "v8CTF Chrome 151"
+platform: "Chrome / V8"
+event: "v8CTF"
+year: "2026"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/google/security-research"
+source_path: "v8ctf/chrome-151"
+source_file_count: 11
+homepage: "https://github.com/google/security-research/tree/master/v8ctf"
+collection: ""
+dedup_fingerprint: "v8|ctf|v8ctf|v8ctf-chrome-151"
+standalone_d8: false

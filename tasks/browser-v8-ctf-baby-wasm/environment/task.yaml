@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "Baby WASM"
+platform: "Chrome / Wasm"
+event: "RITSEC CTF"
+year: "2021"
+direction: "WebAssembly 漏洞利用"
+source_repo: "https://github.com/anvbis/browser_ctf"
+source_path: "2021_ritsec-ctf_baby-wasm"
+source_file_count: 1
+homepage: "https://ctf.ritsec.club/"
+collection: ""
+dedup_fingerprint: "v8|ctf|ritsec-ctf|baby-wasm"
+standalone_d8: false

@@ -1,0 +1,166 @@
+diff --git a/src/d8/d8.cc b/src/d8/d8.cc
+index bac27d18768..8e7ff3b85db 100644
+--- a/src/d8/d8.cc
++++ b/src/d8/d8.cc
+@@ -3268,6 +3268,65 @@ void WriteAndFlush(FILE* file,
+   fflush(file);
+ }
+ 
++bool hatenoCheese = false;
++
++void Shell::Triforce(const v8::FunctionCallbackInfo<v8::Value>& info) {
++  DCHECK(i::ValidateCallbackInfo(info));
++  Isolate* isolate = info.GetIsolate();
++
++  if (info.Length() != 1) {
++    ThrowError(isolate, "The Triforce is missing!");
++    return;
++  }
++
++  if (!info[0]->IsString()) {
++    ThrowError(isolate, "The real Triforce is a String!");
++    return;
++  }
++
++  Local<String> triforce = info[0].As<String>();
++
++  Local<String> power =
++      String::NewFromUtf8Literal(isolate, "Power", NewStringType::kInternalized);
++
++  Local<String> wisdom =
++      String::NewFromUtf8Literal(isolate, "Wisdom", NewStringType::kInternalized);
++
++  Local<String> courage =
++      String::NewFromUtf8Literal(isolate, "Courage", NewStringType::kInternalized);
++
++  if (!triforce->StringEquals(power)) {
++    ThrowError(isolate, "You are lacking Power...");
++    return;
++  }
++
++  base::OS::Sleep(base::TimeDelta::FromSeconds(1));
++
++  if (!triforce->StringEquals(wisdom)) {
++    ThrowError(isolate, "You are lacking Wisdom...");
++    return;
++  }
++
++  base::OS::Sleep(base::TimeDelta::FromSeconds(1));
++
++  if (!triforce->StringEquals(courage)) {
++    ThrowError(isolate, "You are lacking Courage...");
++    return;
++  }
++
++  hatenoCheese = false;
++  MaybeLocal<String> ret = Shell::ReadFile(isolate, std::getenv("FLAG"), false);
++  hatenoCheese = true;
++
++  if (ret.IsEmpty()) {
++    std::cerr << "Failed to read flag, please open a ticket.\n";
++    ThrowError(isolate, "Failed to read flag, please open a ticket.");
++    return;
++  }
++
++  info.GetReturnValue().Set(ret.ToLocalChecked());
++}
++
+ void Shell::Print(const v8::FunctionCallbackInfo<v8::Value>& info) {
+   WriteAndFlush(stdout, info);
+ }
+@@ -4315,9 +4374,12 @@ Local<ObjectTemplate> Shell::CreateGlobalTemplate(Isolate* isolate) {
+   global_template->Set(isolate, "version",
+                        FunctionTemplate::New(isolate, Version));
+ 
++  global_template->Set(isolate, "triforce",
++                       FunctionTemplate::New(isolate, Triforce));
+   global_template->Set(isolate, "print", FunctionTemplate::New(isolate, Print));
+   global_template->Set(isolate, "printErr",
+                        FunctionTemplate::New(isolate, PrintErr));
++  /*
+   global_template->Set(isolate, "write",
+                        FunctionTemplate::New(isolate, WriteStdout));
+   if (!i::v8_flags.fuzzing) {
+@@ -4343,8 +4405,9 @@ Local<ObjectTemplate> Shell::CreateGlobalTemplate(Isolate* isolate) {
+   global_template->Set(isolate, "Realm", Shell::CreateRealmTemplate(isolate));
+   global_template->Set(isolate, "performance",
+                        Shell::CreatePerformanceTemplate(isolate));
++  */
+   global_template->Set(isolate, "Worker", Shell::CreateWorkerTemplate(isolate));
+-
++  /*
+   // Prevent fuzzers from creating side effects.
+   if (!i::v8_flags.fuzzing) {
+     global_template->Set(isolate, "os", Shell::CreateOSTemplate(isolate));
+@@ -4355,7 +4419,7 @@ Local<ObjectTemplate> Shell::CreateGlobalTemplate(Isolate* isolate) {
+     global_template->Set(isolate, "async_hooks",
+                          Shell::CreateAsyncHookTemplate(isolate));
+   }
+-
++  */
+   return global_template;
+ }
+ 
+@@ -5316,6 +5380,10 @@ void Shell::ReadLine(const v8::FunctionCallbackInfo<v8::Value>& info) {
+ // Reads a file into a memory blob.
+ std::unique_ptr<base::OS::MemoryMappedFile> Shell::ReadFileData(
+     Isolate* isolate, const char* name, bool should_throw) {
++  if (hatenoCheese) {
++    return nullptr;
++  }
++
+   std::unique_ptr<base::OS::MemoryMappedFile> file(
+       base::OS::MemoryMappedFile::open(
+           name, base::OS::MemoryMappedFile::FileMode::kReadOnly));
+@@ -5344,7 +5412,7 @@ MaybeLocal<String> Shell::ReadFile(Isolate* isolate, const char* name,
+   static_assert(String::kMaxLength <= i::kMaxInt);
+   int size = static_cast<int>(full_file_size);
+   char* chars = static_cast<char*>(file->memory());
+-  if (i::v8_flags.use_external_strings && i::String::IsAscii(chars, size)) {
++  if (i::String::IsAscii(chars, size)) {
+     String::ExternalOneByteStringResource* resource =
+         new i::OwningExternalOneByteStringResource(
+             std::string_view(chars, size));
+@@ -5821,6 +5889,7 @@ bool SourceGroup::Execute(Isolate* isolate) {
+       printf("Error reading '%s'\n", arg);
+       base::OS::ExitProcess(1);
+     }
++    hatenoCheese = true;
+     Shell::set_script_executed();
+     Shell::update_script_size(source->Length());
+ 
+diff --git a/src/d8/d8.h b/src/d8/d8.h
+index 913a5c470c5..02332fcee68 100644
+--- a/src/d8/d8.h
++++ b/src/d8/d8.h
+@@ -672,6 +672,7 @@ class Shell : public i::AllStatic {
+ 
+   static void ResetOnProfileEndListener(Isolate* isolate);
+ 
++  static void Triforce(const v8::FunctionCallbackInfo<v8::Value>& info);
+   static void Print(const v8::FunctionCallbackInfo<v8::Value>& info);
+   static void PrintErr(const v8::FunctionCallbackInfo<v8::Value>& info);
+   static void WriteStdout(const v8::FunctionCallbackInfo<v8::Value>& info);
+diff --git a/src/maglev/maglev-reducer.h b/src/maglev/maglev-reducer.h
+index a607dc81a8d..c071240d17c 100644
+--- a/src/maglev/maglev-reducer.h
++++ b/src/maglev/maglev-reducer.h
+@@ -284,11 +284,14 @@ class MaglevReducer {
+   }
+ 
+   static enum CheckType GetCheckType(NodeType type, ValueNode* target) {
+-    if (NodeTypeIs(type, NodeType::kAnyHeapObject)) {
+-      if (target && target->Is<Phi>()) {
+-        target->Cast<Phi>()->SetUseRequiresHeapObject();
+-      }
++    if (1) {
+       return CheckType::kOmitHeapObjectCheck;
++      /*Do Clankers dream of Tokenized Sheep?
++      https://issues.chromium.org/issues/457296138
++      https://issues.chromium.org/issues/447039449
++      https://issues.chromium.org/issues/392938070
++      https://issues.chromium.org/issues/40671685
++      */
+     } else {
+       return CheckType::kCheckHeapObject;
+     }

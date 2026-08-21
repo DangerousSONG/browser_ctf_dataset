@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "Optimal Vee Ate"
+platform: "Chrome / V8"
+event: "DownUnderCTF"
+year: "2022"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/anvbis/browser_ctf"
+source_path: "2022_ductf_optimal-vee-ate"
+source_file_count: 1
+homepage: "https://downunderctf.com/"
+collection: ""
+dedup_fingerprint: "v8|ctf|downunderctf|optimal-vee-ate"
+standalone_d8: false

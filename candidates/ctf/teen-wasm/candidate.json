@@ -1,0 +1,16 @@
+{
+  "source_type": "ctf",
+  "challenge": "Teen WASM",
+  "platform": "Chrome / Wasm",
+  "repo": "https://github.com/anvbis/browser_ctf",
+  "homepage": "https://ctf.ritsec.club/",
+  "event": "RITSEC CTF",
+  "direction": "WebAssembly 漏洞利用",
+  "year": "2021",
+  "collection": "",
+  "note": "",
+  "writeups": [],
+  "source_path": "2021_ritsec-ctf_teen-wasm",
+  "source_file_count": 1,
+  "match_score": 307
+}

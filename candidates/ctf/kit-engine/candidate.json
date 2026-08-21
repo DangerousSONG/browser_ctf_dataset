@@ -1,0 +1,16 @@
+{
+  "source_type": "ctf",
+  "challenge": "Kit Engine",
+  "platform": "Chrome / V8",
+  "repo": "https://github.com/exd0tpy/CTF-browser-challenges",
+  "homepage": "https://picoctf.org/",
+  "event": "picoCTF",
+  "direction": "V8 引擎漏洞利用",
+  "year": "2021",
+  "collection": "",
+  "note": "",
+  "writeups": [],
+  "source_path": "Kit_Engine",
+  "source_file_count": 9,
+  "match_score": 317
+}

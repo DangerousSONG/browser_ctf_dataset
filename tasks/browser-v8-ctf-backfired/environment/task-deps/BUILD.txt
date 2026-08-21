@@ -1,0 +1,12 @@
+CTF source package for Backfired
+
+Source repository: https://github.com/ECSC2024/openECSC-2024
+Source path: round-4/pwn03
+Source files copied: 24
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-backfired/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

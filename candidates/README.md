@@ -4,6 +4,34 @@ Recommended starting set from the reproduction spec. These are **new** samples
 to build on bench-v8; they are **not** in the ExploitBench `TARGETS` list at
 commit `9d0173bcf8835b74a45f60450ae7f184e29e7607` (dedup baseline).
 
+The reproduction guide may refer to
+`benchmarks/bench-v8/candidates/<CVE>/README.md` or
+`v8/candidates/<CVE>/README.md`. In this repository, that candidate metadata is
+kept here instead:
+
+```text
+candidates/<CVE-ID>/candidate.json
+candidates/<CVE-ID>/README.md
+```
+
+Generated runnable task packages live under:
+
+```text
+tasks/browser-v8-cve-<cve-id>/
+```
+
+CTF challenge metadata is generated under:
+
+```text
+candidates/ctf/<challenge-slug>/candidate.json
+```
+
+CTF runnable task packages live under:
+
+```text
+tasks/browser-v8-ctf-<challenge-slug>/
+```
+
 Exact `tgt_commit` / `last_patch_commit` are filled by
 `python scripts/bootstrap_bug.py <CVE>` (parent of first direct fix, not a
 later hardening commit). Do not invent SHAs by hand.

@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "Just In Time"
+platform: "Chrome / JIT"
+event: "Google CTF"
+year: "2018"
+direction: "JIT 优化机制漏洞利用"
+source_repo: "https://github.com/anvbis/browser_ctf"
+source_path: "2018_google-ctf_just-in-time"
+source_file_count: 1
+homepage: "https://capturetheflag.withgoogle.com/"
+collection: ""
+dedup_fingerprint: "v8|ctf|google-ctf|just-in-time"
+standalone_d8: false

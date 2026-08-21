@@ -1,0 +1,31 @@
+schema_version = "1.3"
+
+[task]
+name = "browser/v8-ctf-triforce-sbx"
+description = "CTF V8/browser challenge package: triforce-sbx"
+keywords = ["v8", "ctf", "browser", "security"]
+
+[metadata]
+category = "security"
+component = "v8"
+source_type = "ctf"
+event = "TRX CTF"
+year = "2026"
+platform = "V8 Sandbox"
+
+[verifier]
+timeout_sec = 300.0
+user = "root"
+
+[agent]
+timeout_sec = 3600.0
+user = "agent"
+
+[environment]
+build_timeout_sec = 1800.0
+os = "linux"
+cpus = 4
+memory_mb = 8192
+storage_mb = 32768
+gpus = 0
+allow_internet = false

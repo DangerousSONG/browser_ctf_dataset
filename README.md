@@ -10,6 +10,7 @@ CI 或专门的 Linux amd64 构建机上编译与验证。
 当前状态：
 
 - 7 个任务目录已经全部通过结构校验和 build-ready 校验。
+- 23 个 V8 CTF 任务目录已经按同款 Harbor 结构生成，并通过 CTF build-ready 校验。
 - `CVE-2024-5830` 已经额外完成本机 Docker 镜像编译和 compose 启动验证。
 
 已经完整构建并验证过镜像的样例：
@@ -22,10 +23,11 @@ CI 或专门的 Linux amd64 构建机上编译与验证。
 
 ```text
 browser_ctf_dataset/
-├── candidates/                     # CVE 候选材料和筛选记录
+├── candidates/                     # CVE / CTF 候选材料和筛选记录
 ├── scripts/                        # 同步、生成、bootstrap、校验、构建脚本
 ├── tasks/                          # 最终交付的 Harbor 任务目录
-│   └── browser-v8-cve-2024-5830/
+│   ├── browser-v8-cve-2024-5830/
+│   └── browser-v8-ctf-kit-engine/
 │       ├── task.toml
 │       ├── instruction.md
 │       ├── environment/
@@ -42,10 +44,11 @@ browser_ctf_dataset/
 └── README.md
 ```
 
-每个 CVE 后续都应该是一个独立目录：
+每个 CVE / CTF 题目后续都应该是一个独立目录：
 
 ```text
 tasks/browser-v8-<cve-id>/
+tasks/browser-v8-ctf-<challenge-slug>/
 ```
 
 例如：
@@ -54,6 +57,45 @@ tasks/browser-v8-<cve-id>/
 tasks/browser-v8-cve-2024-5830/
 tasks/browser-v8-cve-2024-8904/
 tasks/browser-v8-cve-2023-3079/
+tasks/browser-v8-ctf-kit-engine/
+tasks/browser-v8-ctf-v8ctf-chrome-150/
+```
+
+## 构建指南路径对应关系
+
+领导给的构建指南里提到的候选材料路径类似：
+
+```text
+benchmarks/bench-v8/candidates/<CVE>/README.md
+v8/candidates/<CVE>/README.md
+```
+
+这是指南里的参考路径，不是本仓库当前的真实目录。当前仓库把候选材料从
+上游 `bench-v8` 目录中独立出来，统一放在仓库根目录：
+
+```text
+candidates/<CVE-ID>/candidate.json
+candidates/<CVE-ID>/README.md
+```
+
+其中：
+
+- 精确版本对：看 `candidate.json` 里的 `tgt_commit` 和 `last_patch_commit`，也会同步写入任务目录的 `environment/task.yaml`。
+- Chromium issue：看 `candidate.json` 里的 `crbug` 和 `sources`。
+- Chrome 版本映射：看 `candidate.json` 里的 `chrome_fixed_version`。
+- 验收标准：看 `candidate.json` 里的 `declared_tier_goal`、`min_accepted_tier` 和 `grader_range`。
+- 最终可交付任务目录：看 `tasks/browser-v8-cve-<cve-id>/`。
+
+CTF 题目的候选材料放在：
+
+```text
+candidates/ctf/<challenge-slug>/candidate.json
+```
+
+CTF 题目的最终可交付目录放在：
+
+```text
+tasks/browser-v8-ctf-<challenge-slug>/
 ```
 
 ## 镜像存在哪里
@@ -118,7 +160,7 @@ python scripts/validate_all.py
 期望结果：
 
 ```text
-Total: 7, Passed: 7
+Total: 30, Passed: 30
 ```
 
 再检查哪些任务已经具备真实构建材料：
@@ -143,6 +185,23 @@ Total: 7, Ready: 7
 
 如果后续新增任务显示 `PENDING_BOOTSTRAP`，表示目录结构已经生成，但还没有补齐真实的
 V8 revision pair 和 inner Dockerfile，不能保证直接编译。
+
+CTF 题目使用单独的 build-ready 校验：
+
+```powershell
+python scripts/validate_ctf_build_ready.py
+```
+
+当前 CTF build-ready 状态：
+
+```text
+Total: 23, Ready: 23
+```
+
+CTF 的 build-ready 含义是：已经从公开 CTF 仓库定位并复制原始题目文件到
+`environment/task-deps/inner/`，并生成了和 CVE 任务一致的外层 Harbor 目录、
+Dockerfile、compose 配置和 smoke-check 验证入口。CTF 任务不会伪造成 CVE 的
+V8 revision pair；相关来源、赛事和题目元信息记录在 `environment/task.yaml`。
 
 ## 构建一个完整样例
 
@@ -353,6 +412,42 @@ python scripts/validate_build_ready.py
 ```
 
 只有显示 `[READY]` 的任务，才表示已经补齐真实构建材料。
+
+## 生成 CTF 任务目录
+
+CTF 题目列表来源于 `安全数据需求地图.xlsx` 的 `浏览器漏洞利用` 工作表。
+生成脚本会筛选 V8 / d8 / JIT / TurboFan / Wasm 相关题目，并按同款任务结构输出到
+`tasks/browser-v8-ctf-*`。
+
+生成某个源仓库中的 CTF 任务：
+
+```powershell
+python scripts/import_ctf_tasks.py --repo-name browser_ctf
+```
+
+生成前 N 个筛选后的 CTF 任务：
+
+```powershell
+python scripts/import_ctf_tasks.py --limit 5
+```
+
+校验 CTF 任务是否 build-ready：
+
+```powershell
+python scripts/validate_ctf_build_ready.py
+```
+
+当前已生成并校验通过的 CTF 任务包括：
+
+```text
+tasks/browser-v8-ctf-baby-array-xor/
+tasks/browser-v8-ctf-backfired/
+tasks/browser-v8-ctf-e-corp-part-2/
+tasks/browser-v8-ctf-kit-engine/
+tasks/browser-v8-ctf-krautflare/
+tasks/browser-v8-ctf-v8ctf-chrome-150/
+tasks/browser-v8-ctf-v8ctf-chrome-151/
+```
 
 ## 常见问题
 

@@ -1,0 +1,23 @@
+services:
+  main:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: browser-v8-ctf-the-false-promise
+    working_dir: /workspace
+    volumes:
+      - ../workspace:/workspace
+      - ../tests:/tests:ro
+      - verifier-logs:/logs/verifier
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+  verify:
+    extends:
+      service: main
+    command: ["/bin/bash", "/tests/test.sh"]
+
+volumes:
+  verifier-logs:

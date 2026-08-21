@@ -1,0 +1,12 @@
+CTF source package for Baby Array.xor
+
+Source repository: https://github.com/ECSC2024/openECSC-2024
+Source path: round-3/pwn03
+Source files copied: 21
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-baby-array-xor/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

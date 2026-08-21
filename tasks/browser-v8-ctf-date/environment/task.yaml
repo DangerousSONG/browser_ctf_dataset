@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "Date"
+platform: "Chrome / V8"
+event: "KITCTFCTF"
+year: "2022"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/anvbis/browser_ctf"
+source_path: "2022_kitctfctf_date"
+source_file_count: 1
+homepage: "https://kitctf.de/"
+collection: ""
+dedup_fingerprint: "v8|ctf|kitctfctf|date"
+standalone_d8: false

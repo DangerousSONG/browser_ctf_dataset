@@ -1,0 +1,19 @@
+{
+  "source_type": "ctf",
+  "challenge": "OOB-V8",
+  "platform": "Chrome / V8",
+  "repo": "https://github.com/anvbis/browser_ctf",
+  "homepage": "http://starctf.xctf.org.cn/",
+  "event": "*CTF",
+  "direction": "V8 引擎漏洞利用",
+  "year": "2019",
+  "collection": "",
+  "note": "",
+  "writeups": [
+    "https://faraz.faith/2019-12-13-starctf-oob-v8-indepth/",
+    "https://gist.github.com/wbowling/4bf9937258176fe469e83c4c098deef6"
+  ],
+  "source_path": "2019_starctf_oob-v8",
+  "source_file_count": 1,
+  "match_score": 282
+}

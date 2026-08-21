@@ -1,0 +1,16 @@
+{
+  "source_type": "ctf",
+  "challenge": "v8CTF Chrome 150",
+  "platform": "Chrome / V8",
+  "repo": "https://github.com/google/security-research",
+  "homepage": "https://github.com/google/security-research/tree/master/v8ctf",
+  "event": "v8CTF",
+  "direction": "V8 引擎漏洞利用",
+  "year": "2026",
+  "collection": "",
+  "note": "",
+  "writeups": [],
+  "source_path": "v8ctf/chrome-150",
+  "source_file_count": 11,
+  "match_score": 359
+}

@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "Krautflare"
+platform: "Chrome / V8"
+event: "35C3 CTF"
+year: "2018"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/anvbis/browser_ctf"
+source_path: "2018_35c3-ctf_krautflare"
+source_file_count: 1
+homepage: "https://archive.aachen.ccc.de/35c3ctf.ccc.ac"
+collection: ""
+dedup_fingerprint: "v8|ctf|35c3-ctf|krautflare"
+standalone_d8: false

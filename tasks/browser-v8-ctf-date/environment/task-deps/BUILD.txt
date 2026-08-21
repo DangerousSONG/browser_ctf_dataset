@@ -1,0 +1,12 @@
+CTF source package for Date
+
+Source repository: https://github.com/anvbis/browser_ctf
+Source path: 2022_kitctfctf_date
+Source files copied: 1
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-date/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

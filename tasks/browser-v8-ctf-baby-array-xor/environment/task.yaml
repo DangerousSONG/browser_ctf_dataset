@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "Baby Array.xor"
+platform: "V8 / JIT"
+event: "openECSC"
+year: "2024"
+direction: "JIT 优化机制漏洞利用"
+source_repo: "https://github.com/ECSC2024/openECSC-2024"
+source_path: "round-3/pwn03"
+source_file_count: 21
+homepage: "https://open.ecsc2024.it/"
+collection: "自动采集"
+dedup_fingerprint: "v8|ctf|openecsc|baby-array-xor"
+standalone_d8: false

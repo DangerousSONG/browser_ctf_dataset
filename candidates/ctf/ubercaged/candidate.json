@@ -1,0 +1,16 @@
+{
+  "source_type": "ctf",
+  "challenge": "Übercaged",
+  "platform": "V8 / Wasm Sandbox",
+  "repo": "https://github.com/Team-Drovosec/sasctf-quals-2024",
+  "homepage": "https://ctf.thesascon.com/",
+  "event": "SAS CTF",
+  "direction": "V8 Sandbox 逃逸",
+  "year": "2024",
+  "collection": "自动采集",
+  "note": "",
+  "writeups": [],
+  "source_path": "tasks/pwn-ubercaged",
+  "source_file_count": 26,
+  "match_score": 301
+}

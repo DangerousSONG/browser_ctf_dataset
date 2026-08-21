@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "E-Corp Part 2"
+platform: "V8 / JIT"
+event: "UTCTF"
+year: "2025"
+direction: "JIT 优化机制漏洞利用"
+source_repo: "https://github.com/utisss/UTCTF-25"
+source_path: "pwn-ecorp2"
+source_file_count: 11
+homepage: "https://utctf.live/"
+collection: "自动采集"
+dedup_fingerprint: "v8|ctf|utctf|e-corp-part-2"
+standalone_d8: false

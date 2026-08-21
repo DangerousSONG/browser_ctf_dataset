@@ -10,6 +10,7 @@ build-logs/
 
 # Local reports and caches
 verify_report.json
+ctf_import_report.json
 .env
 .cache/
 tasks/**/workspace/

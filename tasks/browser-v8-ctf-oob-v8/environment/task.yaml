@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "OOB-V8"
+platform: "Chrome / V8"
+event: "*CTF"
+year: "2019"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/anvbis/browser_ctf"
+source_path: "2019_starctf_oob-v8"
+source_file_count: 1
+homepage: "http://starctf.xctf.org.cn/"
+collection: ""
+dedup_fingerprint: "v8|ctf|ctf|oob-v8"
+standalone_d8: false

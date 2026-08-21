@@ -1,0 +1,1 @@
+This has the same remote and attachments as Triforce

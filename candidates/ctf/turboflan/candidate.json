@@ -1,0 +1,16 @@
+{
+  "source_type": "ctf",
+  "challenge": "Turboflan",
+  "platform": "Chrome / TurboFan",
+  "repo": "https://github.com/anvbis/browser_ctf",
+  "homepage": "https://picoctf.org/",
+  "event": "picoCTF",
+  "direction": "JIT 优化机制漏洞利用",
+  "year": "2021",
+  "collection": "",
+  "note": "",
+  "writeups": [],
+  "source_path": "2021_picoctf_turboflan",
+  "source_file_count": 1,
+  "match_score": 282
+}

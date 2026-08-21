@@ -1,0 +1,12 @@
+CTF source package for Krautflare
+
+Source repository: https://github.com/anvbis/browser_ctf
+Source path: 2018_35c3-ctf_krautflare
+Source files copied: 1
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-krautflare/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

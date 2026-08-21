@@ -1,0 +1,5 @@
+services:
+  triforce:
+    build: ./
+    ports:
+      - "7000:1337"

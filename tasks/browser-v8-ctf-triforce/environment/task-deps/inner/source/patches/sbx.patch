@@ -1,0 +1,55 @@
+diff --git a/BUILD.gn b/BUILD.gn
+index 71359162558..6c358b09198 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -4,7 +4,6 @@
+ 
+ import("//build/config/android/config.gni")
+ import("//build/config/arm.gni")
+-import("//build/config/c++/c++.gni")
+ import("//build/config/coverage/coverage.gni")
+ import("//build/config/dcheck_always_on.gni")
+ import("//build/config/host_byteorder.gni")
+@@ -803,9 +802,6 @@ assert(!v8_enable_pointer_compression_8gb || v8_enable_pointer_compression,
+ assert(!v8_enable_sandbox || v8_enable_external_code_space,
+        "The sandbox requires the external code space")
+ 
+-assert(!v8_enable_sandbox || use_safe_libcxx,
+-       "The sandbox requires libc++ hardening")
+-
+ assert(!v8_enable_memory_corruption_api || v8_enable_sandbox,
+        "The Memory Corruption API requires the sandbox")
+ 
+diff --git a/build_overrides/build.gni b/build_overrides/build.gni
+index 29acce40046..a1e05850717 100644
+--- a/build_overrides/build.gni
++++ b/build_overrides/build.gni
+@@ -34,13 +34,13 @@ use_perfetto_client_library = false
+ enable_java_templates = false
+ 
+ # Enables assertions on safety checks in libc++.
+-enable_safe_libcxx = true
++enable_safe_libcxx = false
+ 
+ # Enable assertions on safety checks, also in libstdc++
+ #
+ # In case the C++ standard library implementation used is libstdc++, then
+ # enable its own hardening checks.
+-enable_safe_libstdcxx = true
++enable_safe_libstdcxx = false
+ 
+ # Allows different projects to specify their own suppressions files.
+ asan_suppressions_file = "//build/sanitizers/asan_suppressions.cc"
+diff --git a/src/objects/js-objects.cc b/src/objects/js-objects.cc
+index ac8ecb60117..4ff2e1eb676 100644
+--- a/src/objects/js-objects.cc
++++ b/src/objects/js-objects.cc
+@@ -1176,7 +1176,7 @@ MaybeDirectHandle<Object> JSReceiver::DefineProperties(
+   std::vector<PropertyDescriptor> descriptors(capacity);
+   size_t descriptors_index = 0;
+   // 7. Repeat for each element nextKey of keys in List order,
+-  for (uint32_t i = 0; i < capacity; ++i) {
++  for (uint32_t i = 0; i < keys->ulength().value(); ++i) {
+     DirectHandle<JSAny> next_key(Cast<JSAny>(keys->get(i)), isolate);
+     // 7a. Let propDesc be props.[[GetOwnProperty]](nextKey).
+     // 7b. ReturnIfAbrupt(propDesc).

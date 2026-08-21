@@ -1,0 +1,19 @@
+{
+  "source_type": "ctf",
+  "challenge": "Date",
+  "platform": "Chrome / V8",
+  "repo": "https://github.com/anvbis/browser_ctf",
+  "homepage": "https://kitctf.de/",
+  "event": "KITCTFCTF",
+  "direction": "V8 引擎漏洞利用",
+  "year": "2022",
+  "collection": "",
+  "note": "",
+  "writeups": [
+    "https://ctftime.org/writeup/36044",
+    "https://ju256.rip/posts/kitctfctf22-date/"
+  ],
+  "source_path": "2022_kitctfctf_date",
+  "source_file_count": 1,
+  "match_score": 290
+}

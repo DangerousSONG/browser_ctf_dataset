@@ -1,0 +1,19 @@
+{
+  "source_type": "ctf",
+  "challenge": "Just In Time",
+  "platform": "Chrome / JIT",
+  "repo": "https://github.com/anvbis/browser_ctf",
+  "homepage": "https://capturetheflag.withgoogle.com/",
+  "event": "Google CTF",
+  "direction": "JIT 优化机制漏洞利用",
+  "year": "2018",
+  "collection": "",
+  "note": "",
+  "writeups": [
+    "https://github.com/google/google-ctf/blob/master/2018/finals/pwn-just-in-time/exploit/index.html",
+    "https://qingwei4.github.io/2023/10/27/Google-CTF-2018-Just-In-Time/"
+  ],
+  "source_path": "2018_google-ctf_just-in-time",
+  "source_file_count": 1,
+  "match_score": 307
+}

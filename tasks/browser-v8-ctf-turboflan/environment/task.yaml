@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "Turboflan"
+platform: "Chrome / TurboFan"
+event: "picoCTF"
+year: "2021"
+direction: "JIT 优化机制漏洞利用"
+source_repo: "https://github.com/anvbis/browser_ctf"
+source_path: "2021_picoctf_turboflan"
+source_file_count: 1
+homepage: "https://picoctf.org/"
+collection: ""
+dedup_fingerprint: "v8|ctf|picoctf|turboflan"
+standalone_d8: false

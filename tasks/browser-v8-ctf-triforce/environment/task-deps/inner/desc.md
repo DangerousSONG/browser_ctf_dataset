@@ -1,0 +1,1 @@
+Maglev (derived from magnetic levitation) is a system of rail transport whose rolling stock is levitated by electromagnets rather than rolled on wheels, eliminating rolling resistance.

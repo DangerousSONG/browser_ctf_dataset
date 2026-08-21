@@ -1,0 +1,19 @@
+{
+  "source_type": "ctf",
+  "challenge": "Roll a D8",
+  "platform": "Chrome / V8",
+  "repo": "https://github.com/anvbis/browser_ctf",
+  "homepage": "https://plaidctf.com/",
+  "event": "PlaidCTF",
+  "direction": "V8 引擎漏洞利用",
+  "year": "2018",
+  "collection": "",
+  "note": "",
+  "writeups": [
+    "https://ctftime.org/writeup/9999",
+    "https://mem2019.github.io/jekyll/update/2019/07/12/Roll-A-D8.html"
+  ],
+  "source_path": "2018_plaidctf_roll-a-d8",
+  "source_file_count": 1,
+  "match_score": 282
+}

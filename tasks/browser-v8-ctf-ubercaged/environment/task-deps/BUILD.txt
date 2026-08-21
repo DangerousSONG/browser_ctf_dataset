@@ -1,0 +1,12 @@
+CTF source package for Übercaged
+
+Source repository: https://github.com/Team-Drovosec/sasctf-quals-2024
+Source path: tasks/pwn-ubercaged
+Source files copied: 26
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-ubercaged/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

@@ -1,0 +1,12 @@
+CTF source package for triforce-sbx
+
+Source repository: https://github.com/TheRomanXpl0it/TRX-CTF-2026
+Source path: pwn/triforce-sbx
+Source files copied: 2
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-triforce-sbx/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

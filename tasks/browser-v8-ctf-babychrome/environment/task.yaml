@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "BabyChrome"
+platform: "Chrome / V8"
+event: "LINE CTF"
+year: "2021"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/anvbis/browser_ctf"
+source_path: "2021_line-ctf_babychrome"
+source_file_count: 1
+homepage: "https://linectf.me/"
+collection: ""
+dedup_fingerprint: "v8|ctf|line-ctf|babychrome"
+standalone_d8: false

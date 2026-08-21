@@ -1,0 +1,12 @@
+CTF source package for E-Corp Part 2
+
+Source repository: https://github.com/utisss/UTCTF-25
+Source path: pwn-ecorp2
+Source files copied: 11
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-e-corp-part-2/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

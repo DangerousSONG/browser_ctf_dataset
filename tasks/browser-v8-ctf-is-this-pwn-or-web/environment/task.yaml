@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "Is this pwn or web?"
+platform: "Chrome / V8"
+event: "DownUnderCTF"
+year: "2020"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/anvbis/browser_ctf"
+source_path: "2020_ductf_is-this-pwn-or-web"
+source_file_count: 1
+homepage: "https://downunderctf.com/"
+collection: ""
+dedup_fingerprint: "v8|ctf|downunderctf|is-this-pwn-or-web"
+standalone_d8: false

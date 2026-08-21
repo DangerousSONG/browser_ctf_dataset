@@ -1,0 +1,19 @@
+{
+  "source_type": "ctf",
+  "challenge": "The False Promise",
+  "platform": "Chrome / V8",
+  "repo": "https://github.com/anvbis/browser_ctf",
+  "homepage": "https://plaidctf.com/",
+  "event": "PlaidCTF",
+  "direction": "V8 引擎漏洞利用",
+  "year": "2021",
+  "collection": "",
+  "note": "",
+  "writeups": [
+    "https://github.com/perfectblue/ctf-writeups/blob/master/2021/plaidctf-2021/the-false-promise/README.md",
+    "https://xpldotjs.github.io/posts/the-false-promise-plaidctf/"
+  ],
+  "source_path": "2021_plaidctf_the-false-promise",
+  "source_file_count": 1,
+  "match_score": 332
+}

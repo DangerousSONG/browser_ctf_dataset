@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "The False Promise"
+platform: "Chrome / V8"
+event: "PlaidCTF"
+year: "2021"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/anvbis/browser_ctf"
+source_path: "2021_plaidctf_the-false-promise"
+source_file_count: 1
+homepage: "https://plaidctf.com/"
+collection: ""
+dedup_fingerprint: "v8|ctf|plaidctf|the-false-promise"
+standalone_d8: false

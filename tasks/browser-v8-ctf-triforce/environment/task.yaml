@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "triforce"
+platform: "V8 / JIT"
+event: "TRX CTF"
+year: "2026"
+direction: "JIT 优化机制漏洞利用"
+source_repo: "https://github.com/TheRomanXpl0it/TRX-CTF-2026"
+source_path: "pwn/triforce"
+source_file_count: 16
+homepage: "https://ctf.theromanxpl0.it/"
+collection: "自动采集"
+dedup_fingerprint: "v8|ctf|trx-ctf|triforce"
+standalone_d8: false

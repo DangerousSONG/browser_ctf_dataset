@@ -1,0 +1,19 @@
+{
+  "source_type": "ctf",
+  "challenge": "Is this pwn or web?",
+  "platform": "Chrome / V8",
+  "repo": "https://github.com/anvbis/browser_ctf",
+  "homepage": "https://downunderctf.com/",
+  "event": "DownUnderCTF",
+  "direction": "V8 引擎漏洞利用",
+  "year": "2020",
+  "collection": "",
+  "note": "",
+  "writeups": [
+    "https://ctftime.org/writeup/23482",
+    "https://project-euphoria.dev/blog/41-my-first-v8-exploit/"
+  ],
+  "source_path": "2020_ductf_is-this-pwn-or-web",
+  "source_file_count": 1,
+  "match_score": 332
+}
