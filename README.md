@@ -13,6 +13,12 @@ CI 或专门的 Linux amd64 构建机上编译与验证。
 - 38 个 V8 CTF 任务目录已经按同款 Harbor 结构生成，并通过 CTF build-ready 校验。
 - `CVE-2024-5830` 已经额外完成本机 Docker 镜像编译和 compose 启动验证。
 
+当前已经整理好的 CVE / CTF 任务清单，以及 CVE 和 CTF 构建流程的区别，见：
+
+```text
+TASK_LIST.md
+```
+
 已经完整构建并验证过镜像的样例：
 
 - `tasks/browser-v8-cve-2024-5830`
