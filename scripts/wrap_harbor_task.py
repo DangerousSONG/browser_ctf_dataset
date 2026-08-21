@@ -8,9 +8,9 @@ into environment/task-deps/inner/ for a source-buildable submission.
 from __future__ import annotations
 
 import json
-import os
 import shutil
 import stat
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,10 +40,25 @@ def image_tag(cve: str) -> str:
     return cve.lower()
 
 
+def bench_v8_image(cve: str) -> str:
+    return image_tag(cve)
+
+
 def render(text: str, mapping: dict[str, str]) -> str:
     for key, value in mapping.items():
         text = text.replace("{" + key + "}", value)
     return text
+
+
+def render_sources(sources: list[dict]) -> str:
+    if not sources:
+        return "- pending source record"
+    rows = []
+    for source in sources:
+        title = source.get("title") or "source"
+        url = source.get("url") or ""
+        rows.append(f"- {title}: {url}".rstrip())
+    return "\n".join(rows)
 
 
 def copy_tree(src: Path, dst: Path, mapping: dict[str, str]) -> None:
@@ -83,6 +98,50 @@ def maybe_copy_inner(cve: str, dest: Path) -> None:
     print(f"[+] copied inner build context -> {inner}")
 
 
+def load_bootstrap_task(cve: str) -> dict:
+    pins = load_pins()
+    task_json = (
+        ROOT
+        / pins["exploitbench"]["path"]
+        / pins["exploitbench"]["bench_v8"]
+        / "bugs"
+        / cve
+        / "task.json"
+    )
+    if not task_json.is_file():
+        return {}
+    return json.loads(task_json.read_text(encoding="utf-8"))
+
+
+def preserve_private_evidence(dest: Path) -> tempfile.TemporaryDirectory[str] | None:
+    evidence = dest / "tests" / "private" / "tier-evidence"
+    if not evidence.exists():
+        return None
+    tmp = tempfile.TemporaryDirectory(prefix="browser-ctf-evidence-")
+    shutil.copytree(evidence, Path(tmp.name) / "tier-evidence")
+    return tmp
+
+
+def restore_private_evidence(saved: tempfile.TemporaryDirectory[str] | None, dest: Path) -> None:
+    if saved is None:
+        return
+    src = Path(saved.name) / "tier-evidence"
+    if not src.exists():
+        return
+    dst = dest / "tests" / "private" / "tier-evidence"
+    dst.mkdir(parents=True, exist_ok=True)
+    for item in src.iterdir():
+        if item.name in {".gitkeep", "README.md"}:
+            continue
+        target = dst / item.name
+        if item.is_dir():
+            if target.exists():
+                shutil.rmtree(target)
+            shutil.copytree(item, target)
+        else:
+            shutil.copy2(item, target)
+
+
 def main() -> int:
     import argparse
 
@@ -92,10 +151,12 @@ def main() -> int:
     args = parser.parse_args()
 
     cand = load_candidate(args.cve)
+    boot = load_bootstrap_task(args.cve)
     task_slug = slug(args.cve)
     dest = ROOT / "tasks" / f"browser-v8-{task_slug}"
     if dest.exists() and not args.force:
         raise SystemExit(f"{dest} exists; pass --force to overwrite")
+    saved_evidence = preserve_private_evidence(dest) if args.force else None
     if dest.exists():
         shutil.rmtree(dest)
 
@@ -103,13 +164,24 @@ def main() -> int:
         "cve": args.cve,
         "task_slug": task_slug,
         "image_tag": image_tag(args.cve),
+        "bench_v8_image": bench_v8_image(args.cve),
         "declared_tier_goal": cand.get("declared_tier_goal") or "T3",
+        "min_accepted_tier": cand.get("min_accepted_tier") or "T3",
+        "direction": cand.get("direction") or "pending analysis",
+        "recommended_as": cand.get("recommended_as") or "candidate",
+        "chrome_fixed_version": cand.get("chrome_fixed_version") or "unknown",
+        "grader_range": cand.get("grader_range") or "unknown",
+        "notes": cand.get("notes") or "",
+        "sources_markdown": render_sources(cand.get("sources") or []),
         "crbug": str(cand.get("crbug") or ""),
-        "tgt_commit": str(cand.get("tgt_commit") or "PENDING_BOOTSTRAP"),
-        "last_patch_commit": str(cand.get("last_patch_commit") or "PENDING_BOOTSTRAP"),
-        "eval_flags_json": json.dumps(cand.get("eval_flags") or []),
+        "tgt_commit": str(cand.get("tgt_commit") or boot.get("tgt_commit") or "PENDING_BOOTSTRAP"),
+        "last_patch_commit": str(cand.get("last_patch_commit") or boot.get("last_patch_commit") or "PENDING_BOOTSTRAP"),
+        "eval_flags_json": json.dumps(cand.get("eval_flags") if cand.get("eval_flags") is not None else boot.get("eval_flags", [])),
     }
     copy_tree(TEMPLATE, dest, mapping)
+    restore_private_evidence(saved_evidence, dest)
+    if saved_evidence is not None:
+        saved_evidence.cleanup()
     maybe_copy_inner(args.cve, dest)
     print(f"[+] wrote {dest}")
     print("    Unified Harbor format; instruction.md has no CVE id.")

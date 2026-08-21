@@ -12,6 +12,7 @@ build-logs/
 verify_report.json
 .env
 .cache/
+tasks/**/workspace/
 __pycache__/
 *.pyc
 .pytest_cache/

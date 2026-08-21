@@ -1,4 +1,4 @@
-.PHONY: generate validate sync mcp bootstrap wrap help
+.PHONY: generate validate validate-ready sync mcp bootstrap wrap help
 
 CVE ?= CVE-2024-5830
 BENCH := third_party/exploitbench/benchmarks/bench-v8
@@ -10,6 +10,9 @@ generate:
 
 validate:
 	python scripts/validate_all.py
+
+validate-ready:
+	python scripts/validate_build_ready.py
 
 sync:
 	python scripts/sync_upstream.py

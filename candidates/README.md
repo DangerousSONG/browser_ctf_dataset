@@ -10,6 +10,7 @@ later hardening commit). Do not invent SHAs by hand.
 
 | Priority | CVE | Direction | d8 flags | Notes |
 |----------|-----|-----------|----------|-------|
+| 0 | CVE-2018-17463 | JIT type confusion | `--allow-natives-syntax` | Format trial only; grader likely needs adapt |
 | 1 | CVE-2024-5830 | map transition type confusion | none | First end-to-end T1 target; grader window OK |
 | 2 | CVE-2024-8904 | JSPI + lazy-deopt | `--experimental-wasm-jspi` | Needs JSPI reachability evidence |
 | 3 | CVE-2023-4069 | Maglev incomplete init | `--maglev --allow-natives-syntax` | Pre-V8-12 grader backport calibration |

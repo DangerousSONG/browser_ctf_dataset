@@ -1,6 +1,10 @@
 # Revision pair and provenance. Not copied into the agent image.
 component: v8
 cve: {cve}
+direction: "{direction}"
+recommended_as: "{recommended_as}"
+chrome_fixed_version: "{chrome_fixed_version}"
+grader_range: "{grader_range}"
 crbug: "{crbug}"
 tgt_commit: "{tgt_commit}"
 last_patch_commit: "{last_patch_commit}"

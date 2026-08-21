@@ -4,9 +4,13 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        BENCH_V8_IMAGE: {image_tag}
+        BENCH_V8_IMAGE: ${BENCH_V8_IMAGE:-{bench_v8_image}}
     image: browser-v8-{task_slug}
     working_dir: /workspace
+    volumes:
+      - ../workspace:/workspace
+      - ../tests:/tests:ro
+      - verifier-logs:/logs/verifier
     mem_limit: 16g
     cpus: 8.0
     cap_drop:
@@ -16,3 +20,16 @@ services:
       - SETGID
     security_opt:
       - no-new-privileges:true
+
+  verify:
+    extends:
+      service: main
+    command: ["/bin/bash", "/tests/test.sh"]
+
+  solution:
+    extends:
+      service: main
+    command: ["/bin/bash", "/tests/private/solution.sh"]
+
+volumes:
+  verifier-logs:

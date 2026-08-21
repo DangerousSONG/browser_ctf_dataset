@@ -1,0 +1,3 @@
+is_debug=false
+symbol_level=2
+target_cpu="x64"

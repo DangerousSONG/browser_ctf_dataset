@@ -23,6 +23,7 @@ REQUIRED = [
 ]
 PINNED_DEBIAN = "debian:bookworm-20231030@sha256:fab22df37377621693c68650b06680c0d8f7c6bf816ec92637944778db3ca2c0"
 HOMEMADE_FETCH = ("WORKDIR /v8", "gclient config https://chromium.googlesource.com/v8/v8.git")
+BENCH_IMAGE_RE = re.compile(r"ARG\s+BENCH_V8_IMAGE=(?:[\w./-]+:)?cve-\d{4}-\d+", re.I)
 
 CVE_RE = re.compile(r"CVE-\d{4}-\d+", re.I)
 LEAK_HINTS = re.compile(
@@ -70,8 +71,18 @@ def validate(task_dir: str) -> bool:
             inner_df = inner.read_text(encoding="utf-8")
             if "debian:bookworm" not in inner_df:
                 fail("inner Dockerfile is not the pinned bench-v8 debian recipe", errors)
-        elif PINNED_DEBIAN not in df:
-            fail("wrapper Dockerfile must pin the bench-v8 debian digest until bootstrap fills inner/", errors)
+        elif PINNED_DEBIAN not in df and not BENCH_IMAGE_RE.search(df):
+            fail("wrapper Dockerfile must pin debian or inherit a named bench-v8 runtime image", errors)
+
+    compose = path / "environment" / "docker-compose.yaml"
+    if compose.exists():
+        text = compose.read_text(encoding="utf-8")
+        if "verify:" not in text:
+            fail("docker-compose.yaml must expose a verify service", errors)
+        if "../tests:/tests:ro" not in text:
+            fail("docker-compose.yaml must mount tests read-only at /tests", errors)
+        if "/tests/test.sh" not in text:
+            fail("verify service must run /tests/test.sh", errors)
 
     contract_path = path / "tests" / "private" / "capability_contract.json"
     if contract_path.exists():
