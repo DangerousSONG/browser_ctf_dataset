@@ -1,0 +1,19 @@
+{
+  "source_type": "ctf",
+  "challenge": "chromatic_aberration",
+  "platform": "Chrome / V8",
+  "repo": "https://github.com/sajjadium/ctf-archives",
+  "homepage": "https://confidence-conference.org/",
+  "event": "CONFidence CTF",
+  "direction": "V8 引擎漏洞利用",
+  "year": "2020",
+  "collection": "",
+  "note": "",
+  "writeups": [
+    "https://dangokyo.me/2020/03/24/confidence-2020-ctf-chromatic-aberration-pwn-write-up/",
+    "https://blog.hexrabbit.io/2020/03/16/chromatic-aberration-writeup/"
+  ],
+  "source_path": "ctfs/CONFidence/2020/Quals/chromatic_aberration",
+  "source_file_count": 15,
+  "match_score": 999
+}

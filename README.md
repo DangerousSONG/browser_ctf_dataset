@@ -10,7 +10,7 @@ CI 或专门的 Linux amd64 构建机上编译与验证。
 当前状态：
 
 - 7 个任务目录已经全部通过结构校验和 build-ready 校验。
-- 23 个 V8 CTF 任务目录已经按同款 Harbor 结构生成，并通过 CTF build-ready 校验。
+- 38 个 V8 CTF 任务目录已经按同款 Harbor 结构生成，并通过 CTF build-ready 校验。
 - `CVE-2024-5830` 已经额外完成本机 Docker 镜像编译和 compose 启动验证。
 
 已经完整构建并验证过镜像的样例：
@@ -160,7 +160,7 @@ python scripts/validate_all.py
 期望结果：
 
 ```text
-Total: 30, Passed: 30
+Total: 45, Passed: 45
 ```
 
 再检查哪些任务已经具备真实构建材料：
@@ -195,7 +195,7 @@ python scripts/validate_ctf_build_ready.py
 当前 CTF build-ready 状态：
 
 ```text
-Total: 23, Ready: 23
+Total: 38, Ready: 38
 ```
 
 CTF 的 build-ready 含义是：已经从公开 CTF 仓库定位并复制原始题目文件到
@@ -443,10 +443,16 @@ python scripts/validate_ctf_build_ready.py
 tasks/browser-v8-ctf-baby-array-xor/
 tasks/browser-v8-ctf-backfired/
 tasks/browser-v8-ctf-e-corp-part-2/
+tasks/browser-v8-ctf-half-promise/
+tasks/browser-v8-ctf-heat/
 tasks/browser-v8-ctf-kit-engine/
 tasks/browser-v8-ctf-krautflare/
+tasks/browser-v8-ctf-memory-hole/
+tasks/browser-v8-ctf-v8-sbx/
+tasks/browser-v8-ctf-v8box-backdoorctf/
 tasks/browser-v8-ctf-v8ctf-chrome-150/
 tasks/browser-v8-ctf-v8ctf-chrome-151/
+tasks/browser-v8-ctf-watthewasm/
 ```
 
 ## 常见问题

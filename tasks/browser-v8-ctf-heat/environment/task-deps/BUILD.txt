@@ -1,0 +1,12 @@
+CTF source package for HEAT
+
+Source repository: https://github.com/sajjadium/ctf-archives
+Source path: ctfs/GoogleCTF/2024/pwn/heat
+Source files copied: 2
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-heat/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

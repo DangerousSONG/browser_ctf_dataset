@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "d8"
+platform: "V8 / d8"
+event: "Google CTF"
+year: "2022"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/sajjadium/ctf-archives"
+source_path: "ctfs/GoogleCTF/2022/pwn/d8"
+source_file_count: 6
+homepage: "https://capturetheflag.withgoogle.com/"
+collection: ""
+dedup_fingerprint: "v8|ctf|google-ctf|d8"
+standalone_d8: false

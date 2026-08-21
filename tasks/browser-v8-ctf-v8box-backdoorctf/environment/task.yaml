@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "V8box"
+platform: "V8"
+event: "BackdoorCTF"
+year: "2024"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/sajjadium/ctf-archives"
+source_path: "ctfs/BackdoorCTF/2024/pwn/V8box"
+source_file_count: 2
+homepage: "https://backdoor.infoseciitr.in/"
+collection: ""
+dedup_fingerprint: "v8|ctf|backdoorctf|v8box"
+standalone_d8: false

@@ -1,0 +1,12 @@
+CTF source package for chromatic_aberration
+
+Source repository: https://github.com/sajjadium/ctf-archives
+Source path: ctfs/CONFidence/2020/Quals/chromatic_aberration
+Source files copied: 15
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-chromatic-aberration/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

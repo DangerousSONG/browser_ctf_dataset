@@ -1,0 +1,12 @@
+CTF source package for V8box
+
+Source repository: https://github.com/sajjadium/ctf-archives
+Source path: ctfs/BackdoorCTF/2024/pwn/V8box
+Source files copied: 2
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-v8box/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

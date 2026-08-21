@@ -1,0 +1,7 @@
+{
+  "source_type": "ctf",
+  "challenge": "V8box",
+  "rounds": 1,
+  "min_accepted_tier": "T3",
+  "acceptance": "source package smoke check only"
+}

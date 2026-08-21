@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "HEAT"
+platform: "V8 / Wasm Sandbox"
+event: "Google CTF"
+year: "2024"
+direction: "WebAssembly + V8 Sandbox 逃逸"
+source_repo: "https://github.com/sajjadium/ctf-archives"
+source_path: "ctfs/GoogleCTF/2024/pwn/heat"
+source_file_count: 2
+homepage: "https://capturetheflag.withgoogle.com/"
+collection: ""
+dedup_fingerprint: "v8|ctf|google-ctf|heat"
+standalone_d8: false

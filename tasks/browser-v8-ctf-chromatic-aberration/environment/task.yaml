@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "chromatic_aberration"
+platform: "Chrome / V8"
+event: "CONFidence CTF"
+year: "2020"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/sajjadium/ctf-archives"
+source_path: "ctfs/CONFidence/2020/Quals/chromatic_aberration"
+source_file_count: 15
+homepage: "https://confidence-conference.org/"
+collection: ""
+dedup_fingerprint: "v8|ctf|confidence-ctf|chromatic-aberration"
+standalone_d8: false

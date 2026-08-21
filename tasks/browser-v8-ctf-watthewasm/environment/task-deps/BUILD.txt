@@ -1,0 +1,12 @@
+CTF source package for WatTheWasm
+
+Source repository: https://github.com/sajjadium/ctf-archives
+Source path: ctfs/GoogleCTF/2023/pwn/watthewasm
+Source files copied: 10
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-watthewasm/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

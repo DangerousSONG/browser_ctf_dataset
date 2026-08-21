@@ -1,0 +1,16 @@
+{
+  "source_type": "ctf",
+  "challenge": "Typer",
+  "platform": "V8",
+  "repo": "https://github.com/sajjadium/ctf-archives",
+  "homepage": "https://2025.crewc.tf/",
+  "event": "CrewCTF",
+  "direction": "V8 引擎漏洞利用",
+  "year": "2023",
+  "collection": "",
+  "note": "",
+  "writeups": [],
+  "source_path": "ctfs/CrewCTF/2023/pwn/Typer",
+  "source_file_count": 5,
+  "match_score": 999
+}

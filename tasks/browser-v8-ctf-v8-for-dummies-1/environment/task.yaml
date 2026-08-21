@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "V8 for dummies 1"
+platform: "V8"
+event: "ASIS CTF Quals"
+year: "2021"
+direction: "V8 引擎漏洞利用"
+source_repo: "https://github.com/sajjadium/ctf-archives"
+source_path: "ctfs/ASIS/2021/Quals/pwn/V8_for_dummies_1"
+source_file_count: 9
+homepage: "https://asisctf.com/"
+collection: ""
+dedup_fingerprint: "v8|ctf|asis-ctf-quals|v8-for-dummies-1"
+standalone_d8: false

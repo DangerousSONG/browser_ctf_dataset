@@ -1,0 +1,16 @@
+{
+  "source_type": "ctf",
+  "challenge": "Half Promise",
+  "platform": "V8",
+  "repo": "https://github.com/sajjadium/ctf-archives",
+  "homepage": "https://ctf.0ops.sjtu.cn/",
+  "event": "0CTF/TCTF",
+  "direction": "V8 引擎漏洞利用",
+  "year": "2023",
+  "collection": "",
+  "note": "",
+  "writeups": [],
+  "source_path": "ctfs/0CTF/2023/pwn/Half_Promise",
+  "source_file_count": 12,
+  "match_score": 999
+}

@@ -1,0 +1,16 @@
+{
+  "source_type": "ctf",
+  "challenge": "HEAT",
+  "platform": "V8 / Wasm Sandbox",
+  "repo": "https://github.com/sajjadium/ctf-archives",
+  "homepage": "https://capturetheflag.withgoogle.com/",
+  "event": "Google CTF",
+  "direction": "WebAssembly + V8 Sandbox 逃逸",
+  "year": "2024",
+  "collection": "",
+  "note": "",
+  "writeups": [],
+  "source_path": "ctfs/GoogleCTF/2024/pwn/heat",
+  "source_file_count": 2,
+  "match_score": 999
+}

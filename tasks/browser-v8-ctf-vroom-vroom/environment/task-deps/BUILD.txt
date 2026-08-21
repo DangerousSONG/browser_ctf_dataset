@@ -1,0 +1,12 @@
+CTF source package for vroom_vroom
+
+Source repository: https://github.com/sajjadium/ctf-archives
+Source path: ctfs/DownUnderCTF/2023/pwn/vroom_vroom
+Source files copied: 5
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-vroom-vroom/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

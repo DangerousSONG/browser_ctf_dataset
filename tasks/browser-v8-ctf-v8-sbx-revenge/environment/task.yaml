@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "V8 SBX Revenge"
+platform: "V8 Sandbox"
+event: "HITCON CTF"
+year: "2024"
+direction: "V8 Sandbox 逃逸"
+source_repo: "https://github.com/sajjadium/ctf-archives"
+source_path: "ctfs/HITCON/2024/Quals/pwn/V8_SBX_Revenge"
+source_file_count: 2
+homepage: "https://ctf.hitcon.org/"
+collection: ""
+dedup_fingerprint: "v8|ctf|hitcon-ctf|v8-sbx-revenge"
+standalone_d8: false

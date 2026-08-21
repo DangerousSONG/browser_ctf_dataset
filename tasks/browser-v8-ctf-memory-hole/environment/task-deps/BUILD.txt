@@ -1,0 +1,12 @@
+CTF source package for memory-hole
+
+Source repository: https://github.com/sajjadium/ctf-archives
+Source path: ctfs/DiceCTF/2022/pwn/memory-hole
+Source files copied: 3
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-memory-hole/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

@@ -1,0 +1,12 @@
+CTF source package for V8 SBX Revenge
+
+Source repository: https://github.com/sajjadium/ctf-archives
+Source path: ctfs/HITCON/2024/Quals/pwn/V8_SBX_Revenge
+Source files copied: 2
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-v8-sbx-revenge/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

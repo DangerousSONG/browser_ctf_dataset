@@ -1,0 +1,12 @@
+CTF source package for v8box
+
+Source repository: https://github.com/sajjadium/ctf-archives
+Source path: ctfs/GoogleCTF/2023/sandbox/v8box
+Source files copied: 10
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-v8box/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

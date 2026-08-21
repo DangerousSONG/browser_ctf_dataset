@@ -1,0 +1,4 @@
+schema_version: "1.0"
+source_type: ctf
+task_slug: "browser-v8-ctf-watthewasm"
+challenge: "WatTheWasm"

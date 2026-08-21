@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "WatTheWasm"
+platform: "V8 / Wasm"
+event: "Google CTF"
+year: "2023"
+direction: "WebAssembly 漏洞利用"
+source_repo: "https://github.com/sajjadium/ctf-archives"
+source_path: "ctfs/GoogleCTF/2023/pwn/watthewasm"
+source_file_count: 10
+homepage: "https://capturetheflag.withgoogle.com/"
+collection: ""
+dedup_fingerprint: "v8|ctf|google-ctf|watthewasm"
+standalone_d8: false

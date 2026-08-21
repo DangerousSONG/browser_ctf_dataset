@@ -57,6 +57,21 @@ MANUAL_SOURCE_PATHS = {
     ("UTCTF-25", "e-corp part 2"): "pwn-ecorp2",
     ("openECSC-2024", "baby array.xor"): "round-3/pwn03",
     ("openECSC-2024", "backfired"): "round-4/pwn03",
+    ("ctf-archives", "chromatic_aberration", "confidence ctf"): "ctfs/CONFidence/2020/Quals/chromatic_aberration",
+    ("ctf-archives", "v8 for dummies 1", "asis ctf quals"): "ctfs/ASIS/2021/Quals/pwn/V8_for_dummies_1",
+    ("ctf-archives", "memory-hole", "dicectf"): "ctfs/DiceCTF/2022/pwn/memory-hole",
+    ("ctf-archives", "d8", "google ctf"): "ctfs/GoogleCTF/2022/pwn/d8",
+    ("ctf-archives", "half promise", "0ctf/tctf"): "ctfs/0CTF/2023/pwn/Half_Promise",
+    ("ctf-archives", "promise", "0ctf/tctf"): "ctfs/0CTF/2023/pwn/Promise",
+    ("ctf-archives", "typer", "crewctf"): "ctfs/CrewCTF/2023/pwn/Typer",
+    ("ctf-archives", "vroom_vroom", "downunderctf"): "ctfs/DownUnderCTF/2023/pwn/vroom_vroom",
+    ("ctf-archives", "watthewasm", "google ctf"): "ctfs/GoogleCTF/2023/pwn/watthewasm",
+    ("ctf-archives", "v8box", "google ctf"): "ctfs/GoogleCTF/2023/sandbox/v8box",
+    ("ctf-archives", "v8box", "backdoorctf"): "ctfs/BackdoorCTF/2024/pwn/V8box",
+    ("ctf-archives", "heat", "google ctf"): "ctfs/GoogleCTF/2024/pwn/heat",
+    ("ctf-archives", "v8 sbx", "hitcon ctf"): "ctfs/HITCON/2024/Quals/pwn/V8_SBX",
+    ("ctf-archives", "v8 sbx revenge", "hitcon ctf"): "ctfs/HITCON/2024/Quals/pwn/V8_SBX_Revenge",
+    ("ctf-archives", "deadv8 sandbox", "deadsec ctf"): "ctfs/DeadSec/2025/pwn/DeadV8_Sandbox",
 }
 
 
@@ -252,7 +267,9 @@ def score_dir(row: Row, directory: str, files_in_dir: list[str]) -> int:
 
 
 def locate_source(row: Row, repo_dir: Path) -> tuple[str | None, int]:
-    manual = MANUAL_SOURCE_PATHS.get((repo_dir.name, row.title.lower()))
+    manual = MANUAL_SOURCE_PATHS.get((repo_dir.name, row.title.lower(), row.event.lower()))
+    if manual is None:
+        manual = MANUAL_SOURCE_PATHS.get((repo_dir.name, row.title.lower()))
     if manual:
         return manual, 999
     files = git_files(repo_dir)
@@ -589,6 +606,24 @@ def write_candidate(row: Row, slug: str, source_path: str, source_count: int, sc
     write(ROOT / "candidates" / "ctf" / slug / "candidate.json", json.dumps(candidate, indent=2, ensure_ascii=False) + "\n")
 
 
+def unique_slug(row: Row, seen: set[str]) -> str:
+    slug = slugify(row.title)
+    if slug not in seen:
+        seen.add(slug)
+        return slug
+    event_slug = slugify(row.event)
+    candidate = f"{slug}-{event_slug}" if event_slug else slug
+    if candidate not in seen:
+        seen.add(candidate)
+        return candidate
+    index = 2
+    while f"{candidate}-{index}" in seen:
+        index += 1
+    final = f"{candidate}-{index}"
+    seen.add(final)
+    return final
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--workbook", type=Path, default=DEFAULT_WORKBOOK)
@@ -608,8 +643,13 @@ def main() -> int:
 
     generated = 0
     missing: list[dict[str, str]] = []
+    seen_slugs = {
+        p.name.removeprefix("browser-v8-ctf-")
+        for p in (ROOT / "tasks").glob("browser-v8-ctf-*")
+        if p.is_dir()
+    }
     for row in rows:
-        slug = slugify(row.title)
+        slug = unique_slug(row, seen_slugs)
         if not row.repo:
             missing.append({"challenge": row.title, "reason": "missing repo"})
             continue

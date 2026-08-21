@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "vroom_vroom"
+platform: "V8 / JIT"
+event: "DownUnderCTF"
+year: "2023"
+direction: "JIT 优化机制漏洞利用"
+source_repo: "https://github.com/sajjadium/ctf-archives"
+source_path: "ctfs/DownUnderCTF/2023/pwn/vroom_vroom"
+source_file_count: 5
+homepage: "https://downunderctf.com/"
+collection: ""
+dedup_fingerprint: "v8|ctf|downunderctf|vroom-vroom"
+standalone_d8: false

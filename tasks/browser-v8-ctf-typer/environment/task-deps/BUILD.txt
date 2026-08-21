@@ -1,0 +1,12 @@
+CTF source package for Typer
+
+Source repository: https://github.com/sajjadium/ctf-archives
+Source path: ctfs/CrewCTF/2023/pwn/Typer
+Source files copied: 5
+
+Build wrapper:
+  cd tasks/browser-v8-ctf-typer/environment
+  docker compose build
+
+Smoke check:
+  docker compose run --rm verify

@@ -1,0 +1,14 @@
+component: v8
+source_type: ctf
+challenge: "DeadV8 Sandbox"
+platform: "V8 Sandbox"
+event: "DeadSec CTF"
+year: "2025"
+direction: "V8 Sandbox 逃逸"
+source_repo: "https://github.com/sajjadium/ctf-archives"
+source_path: "ctfs/DeadSec/2025/pwn/DeadV8_Sandbox"
+source_file_count: 2
+homepage: "https://www.deadsec.xyz/"
+collection: ""
+dedup_fingerprint: "v8|ctf|deadsec-ctf|deadv8-sandbox"
+standalone_d8: false

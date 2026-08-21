@@ -1,0 +1,7 @@
+{
+  "source_type": "ctf",
+  "challenge": "DeadV8 Sandbox",
+  "rounds": 1,
+  "min_accepted_tier": "T3",
+  "acceptance": "source package smoke check only"
+}
